@@ -1,12 +1,20 @@
 name: Deploy PULSE
+
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
+
 permissions:
   contents: read
   pages: write
   id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
   deploy:
     environment:
@@ -14,10 +22,34 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v4
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Validate platform
+        run: |
+          test -f index.html
+          test -f clientes.html
+          test -f cliente.html
+          test -f operacoes.html
+          test -f mensagens.html
+          test -f relatorios.html
+          test -f automacoes.html
+          test -f equipe.html
+          test -f configuracoes.html
+          test -f pulse-data.js
+          test -f pulse-app.js
+          test -f pulse-app.css
+          node --check pulse-data.js
+          node --check pulse-app.js
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload static site
+        uses: actions/upload-pages-artifact@v4
         with:
           path: .
-      - id: deployment
+
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
