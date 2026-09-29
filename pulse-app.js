@@ -1,6 +1,6 @@
 const D=window.PULSE_DATA||{};const $=(s,r=document)=>r.querySelector(s);const $$=(s,r=document)=>[...r.querySelectorAll(s)];const TASKS='pulse-tasks-v2',AUTO='pulse-auto-v1',THEME='pulse-theme';const read=(k,f)=>{try{return JSON.parse(localStorage.getItem(k))??f}catch{return f}};const write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 function theme(v){document.documentElement.dataset.theme=v;localStorage.setItem(THEME,v);$$('[data-theme]').forEach(b=>b.textContent=v==='light'?'☾':'☀')}
-function shell(){const s=$('[data-shell]');if(!s)return;s.innerHTML='<aside class="sidebar"><div class="brand">PU<b>L</b>SE</div><div class="workspace-switch">Alureal Workspace<br><small class="muted">Operações</small></div><div class="side-section">Trabalho</div><nav class="side-nav"><a href="index.html">Visão geral</a><a href="clientes.html">Clientes</a><a href="operacoes.html">Operações</a><a href="mensagens.html">Mensagens</a><a href="relatorios.html">Relatórios</a><a href="automacoes.html">Automações</a></nav><div class="side-section">Admin</div><nav class="side-nav"><a href="equipe.html">Equipe</a><a href="configuracoes.html">Configurações</a></nav><div class="side-footer"><div class="user"><span class="avatar">MC</span><div><strong>Marina Costa</strong><br><small class="muted">Admin</small></div></div></div></aside><main class="main" data-main></main><nav class="mobile-nav"><a href="index.html">⌂<span>Início</span></a><a href="clientes.html">◎<span>Clientes</span></a><a href="operacoes.html">✓<span>Tarefas</span></a><a href="mensagens.html">✉<span>Inbox</span></a></nav>'}
+function shell(){const s=$('[data-shell]');if(!s)return;const fallback=s.innerHTML;s.innerHTML='<aside class="sidebar"><div class="brand">PU<b>L</b>SE</div><div class="workspace-switch">Alureal Workspace<br><small class="muted">Operações</small></div><div class="side-section">Trabalho</div><nav class="side-nav"><a href="index.html">Visão geral</a><a href="clientes.html">Clientes</a><a href="operacoes.html">Operações</a><a href="mensagens.html">Mensagens</a><a href="relatorios.html">Relatórios</a><a href="automacoes.html">Automações</a></nav><div class="side-section">Admin</div><nav class="side-nav"><a href="equipe.html">Equipe</a><a href="configuracoes.html">Configurações</a></nav><div class="side-footer"><div class="user"><span class="avatar">MC</span><div><strong>Marina Costa</strong><br><small class="muted">Admin</small></div></div></div></aside><main class="main" data-main></main><nav class="mobile-nav"><a href="index.html">⌂<span>Início</span></a><a href="clientes.html">◎<span>Clientes</span></a><a href="operacoes.html">✓<span>Tarefas</span></a><a href="mensagens.html">✉<span>Inbox</span></a></nav>'}
 function initTheme(){theme(localStorage.getItem(THEME)||'dark');$$('[data-theme]').forEach(b=>b.onclick=()=>theme(document.documentElement.dataset.theme==='dark'?'light':'dark'))}
 function top(title,sub=''){return '<header class="topbar"><div><h1>'+title+'</h1><span class="muted">'+sub+'</span></div><div class="top-actions"><input class="search" placeholder="Buscar no workspace"><button class="icon-btn" data-theme>☀</button><button class="icon-btn">🔔</button></div></header>'}
 function tasks(){return read(TASKS,D.tasks||[])}function saveTasks(v){write(TASKS,v)}
@@ -15,5 +15,25 @@ function reports(){const m=$('[data-main]');m.innerHTML=top('Relatórios','Indic
 function automations(){const m=$('[data-main]'),saved=read(AUTO,D.automations);m.innerHTML=top('Automações','Regras de execução')+'<div class="page-head"><div><h1>Automatize o repetitivo</h1><p>Gatilho → ação → responsável.</p></div><button class="button primary">+ Nova automação</button></div><section class="automation-grid">'+saved.map(a=>'<article class="automation"><div class="automation-head"><div><strong>'+a.name+'</strong><p class="muted">'+a.trigger+'</p></div><button class="switch '+(a.enabled?'on':'')+'" data-auto="'+a.id+'"></button></div><p>'+a.action+'</p></article>').join('')+'</section>';$$('[data-auto]').forEach(b=>b.onclick=()=>{const a=saved.find(x=>x.id===b.dataset.auto);a.enabled=!a.enabled;write(AUTO,saved);automations()})}
 function team(){const m=$('[data-main]');m.innerHTML=top('Equipe','Pessoas e disponibilidade')+'<section class="team-grid">'+D.team.map(t=>'<article class="member"><div class="member-head"><span class="member-avatar">'+t.initials+'</span><div style="flex:1"><strong>'+t.name+'</strong><div class="muted">'+t.role+'</div></div><span class="stage">'+t.status+'</span></div></article>').join('')+'</section>'}
 function settings(){const m=$('[data-main]');m.innerHTML=top('Configurações','Workspace')+'<section class="settings">'+[['Resumo diário','Receber prioridades pela manhã',true],['Alertas de SLA','Avisar conversas atrasadas',true],['Relatório semanal','Consolidar indicadores',false],['Modo foco','Ocultar métricas não essenciais',false],['Notificações push','Receber alertas críticos',true],['Sincronizar calendário','Criar eventos automaticamente',false]].map((s,i)=>'<article class="setting"><label><span><strong>'+s[0]+'</strong><p class="muted">'+s[1]+'</p></span><button class="switch '+(s[2]?'on':'')+'" data-setting="'+i+'"></button></label></article>').join('')+'</section>';$$('[data-setting]').forEach(b=>b.onclick=()=>b.classList.toggle('on'))}
-function init(){shell();initTheme();const p=location.pathname.split('/').pop()||'index.html';if(p==='index.html'||p==='')dashboard();else if(p==='clientes.html')clientsPage();else if(p==='cliente.html')clientDetail();else if(p==='operacoes.html')operations();else if(p==='mensagens.html')messages();else if(p==='relatorios.html')reports();else if(p==='automacoes.html')automations();else if(p==='equipe.html')team();else if(p==='configuracoes.html')settings();initTheme()}
+function init(){
+  shell();
+  initTheme();
+  const p=location.pathname.split('/').pop()||'index.html';
+  try{
+    if(p==='index.html'||p==='')dashboard();
+    else if(p==='clientes.html')clientsPage();
+    else if(p==='cliente.html')clientDetail();
+    else if(p==='operacoes.html')operations();
+    else if(p==='mensagens.html')messages();
+    else if(p==='relatorios.html')reports();
+    else if(p==='automacoes.html')automations();
+    else if(p==='equipe.html')team();
+    else if(p==='configuracoes.html')settings();
+  }catch(error){
+    console.error('PULSE render fallback:',error);
+    const main=$('[data-main]');
+    if(main&&!main.textContent.trim())main.innerHTML='<section class="card"><h1>PULSE</h1><p class="muted">O workspace está carregando. Recarregue a página para tentar novamente.</p></section>';
+  }
+  initTheme();
+}
 document.addEventListener('DOMContentLoaded',init);
