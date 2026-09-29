@@ -14,3 +14,5 @@ document.querySelectorAll('[data-task]').forEach(button=>button.onclick=()=>{
   button.textContent=button.classList.contains('done')?'Concluída':'Concluir';
 });
 document.querySelector('[data-menu]')?.addEventListener('click',()=>{const sidebar=document.querySelector('.sidebar');const open=!sidebar.classList.contains('open');sidebar.classList.toggle('open',open);document.body.classList.toggle('menu-open',open)});document.querySelectorAll('.side-nav a').forEach(link=>link.addEventListener('click',()=>{document.querySelector('.sidebar')?.classList.remove('open');document.body.classList.remove('menu-open')}));
+
+// fresh-pages-deploy-2026-09-29
