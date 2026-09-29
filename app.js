@@ -16,3 +16,9 @@ document.querySelectorAll('[data-task]').forEach(button=>button.onclick=()=>{
 document.querySelector('[data-menu]')?.addEventListener('click',()=>{const sidebar=document.querySelector('.sidebar');const open=!sidebar.classList.contains('open');sidebar.classList.toggle('open',open);document.body.classList.toggle('menu-open',open)});document.querySelectorAll('.side-nav a').forEach(link=>link.addEventListener('click',()=>{document.querySelector('.sidebar')?.classList.remove('open');document.body.classList.remove('menu-open')}));
 
 // fresh-pages-deploy-2026-09-29
+
+// portfolio-polish-2026-09-29
+const pulseSidebar=document.querySelector('.sidebar');
+const closePulseMenu=()=>{pulseSidebar?.classList.remove('open');document.body.classList.remove('menu-open')};
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&pulseSidebar?.classList.contains('open')){closePulseMenu();document.querySelector('[data-menu]')?.focus()}});
+document.addEventListener('pointerdown',event=>{if(document.body.classList.contains('menu-open')&&!pulseSidebar?.contains(event.target)&&!event.target.closest('[data-menu]'))closePulseMenu()});
