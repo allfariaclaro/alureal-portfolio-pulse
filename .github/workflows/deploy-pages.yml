@@ -50,7 +50,11 @@ jobs:
           sleep 1
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
           test -n "$BROWSER"
-          timeout 25s "$BROWSER" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=4000 --dump-dom http://127.0.0.1:4173/ > /tmp/dom.html
+          timeout 25s "$BROWSER" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=4000 --dump-dom http://127.0.0.1:4173/ > /tmp/dom.html || true
+          echo "===== RENDERED DOM ====="
+          head -c 12000 /tmp/dom.html || true
+          echo
+          echo "===== END DOM ====="
           grep -Fq "Receita processada" /tmp/dom.html
 
       - name: Setup Pages
