@@ -18,3 +18,7 @@ body.menu-open{overflow:hidden}
   .task button{justify-self:start}
   .chart{gap:6px}
 }
+
+/* portfolio-polish-2026-09-29 */
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}.sidebar{box-shadow:inset -1px 0 var(--line)}.side-nav a,.period,.task button,.metric,.card{transition:.22s ease}.side-nav a:hover{background:#ffffff08;color:var(--text)}.metric:hover,.card:hover{border-color:#ffffff25}.metric{position:relative;overflow:hidden}.metric::after{content:"";position:absolute;left:18px;right:18px;bottom:0;height:2px;background:linear-gradient(90deg,var(--blue),transparent);opacity:.45}.topbar{position:sticky;top:0;z-index:10;padding:6px 0 18px;background:linear-gradient(to bottom,var(--bg) 75%,transparent)}.period:hover{color:var(--text);border-color:#ffffff25}.task button:hover{border-color:#ffffff35}.bar{transition:height .35s ease,filter .2s}.chart:hover .bar{filter:brightness(1.08)}
+@media(max-width:560px){.main{padding:16px}.topbar{padding-top:4px}.metric strong{font-size:26px}.card-head{align-items:flex-start;gap:12px}.activity-row{padding:12px 0}.footer-note{padding-bottom:max(12px,env(safe-area-inset-bottom))}}
